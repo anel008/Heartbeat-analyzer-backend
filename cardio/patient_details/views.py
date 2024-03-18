@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import pdetails_serializers,Ddetails_serializers
-from .models import Patient_details,Doctor_details
+from .serializers import pdetails_serializers
+from .models import Patient_details
 
 @api_view(['GET','POST'])
 def getRoutes(request):
@@ -32,10 +32,6 @@ def  p_details(request):
 #   serializers = pdetails_serializers(details,many = False)
 #    return Response(serializers.data)
 
-# @api_view(['GET'])
-# def d_details(request):
-#     details = Doctor_details.objects.all()
-#     serializers = Ddetails_serializers(details,many = True)
-#     return Response(serializers.data)
+
 
 

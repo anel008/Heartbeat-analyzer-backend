@@ -40,6 +40,8 @@ INSTALLED_APPS = [
 
 
     'patient_details',
+    'doctor_details',
+    'accounts',
     'rest_framework',
 ]
 

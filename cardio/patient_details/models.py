@@ -14,8 +14,8 @@ class Patient_details(models.Model):
     sex = models.CharField(max_length=1, choices=SEX_CHOICES)
 
     CHOICES = [
-        ('YES', 'yes'),
-        ('NO', 'no'),
+        ('1', 'yes'),
+        ('0', 'no'),
     ]
     
     hyper_tension_bp = models.CharField( max_length=50,choices=CHOICES)
@@ -24,7 +24,7 @@ class Patient_details(models.Model):
     surgery = models.CharField( max_length=50,choices=CHOICES)
     any_other = models.TextField(max_length = 50) 
 
-class Doctor_details(models.Model):
-    doctor_name = models.CharField(max_length=50)
-    description = models.TextField(max_length = 200)
-    health_condition = models.TextField(max_length=100)
+# class Doctor_details(models.Model):
+#     doctor_name = models.CharField(max_length=50)
+#     description = models.TextField(max_length = 200)
+#     health_condition = models.TextField(max_length=100)
