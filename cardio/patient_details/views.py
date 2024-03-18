@@ -7,10 +7,10 @@ from .models import Patient_details,Doctor_details
 def getRoutes(request):
     routes = [
         {
-            'endpoints' : '/notes/' ,
+            'endpoints' : '/patients/' ,
             'method' : 'GET' ,
             'body' : None,
-            'description' :  ' Returns an array of notes',              
+            'description' :  ' Returns an array of patients',              
 
 
 
@@ -37,3 +37,5 @@ def  p_details(request):
 #     details = Doctor_details.objects.all()
 #     serializers = Ddetails_serializers(details,many = True)
 #     return Response(serializers.data)
+
+
