@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from .models import Customdoctor
 from django.contrib.auth.models import User
 
 #User registration 
@@ -27,7 +28,7 @@ class UserSerializers(serializers.ModelSerializer):
 
 # Doctor registration
 
-class Doctorserializer(serializers.ModelSerializer):
+class Custom_Doctor_Serializer(serializers.ModelSerializer):
     password = serializers.CharField(max_length = 100, min_length= 8, write_only = True)
     email = serializers.EmailField(max_length = 100, min_length = 8)
     first_name = serializers.CharField(max_length = 100, min_length = 2)
@@ -36,7 +37,7 @@ class Doctorserializer(serializers.ModelSerializer):
 
 
     class Meta :
-        model = User
+        model = Customdoctor
         fields = ['first_name','last_name','username','email','Doctor_license_no','password']
 
         def validate(self, attrs):

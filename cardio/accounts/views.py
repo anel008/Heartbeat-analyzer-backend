@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework.generics import GenericAPIView
-from .serializers import UserSerializers,Doctorserializer
+from .serializers import UserSerializers,Custom_Doctor_Serializer
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -17,9 +17,9 @@ class PRegisterView(GenericAPIView):
     
 
 class DRegisterView(GenericAPIView):
-    serializer_class = Doctorserializer
+    serializer_class = Custom_Doctor_Serializer
     def post(self, request):
-        serializer = Doctorserializer(data=request.data)
+        serializer = Custom_Doctor_Serializer(data=request.data)
 
         if serializer.is_valid():
             serializer.save()
