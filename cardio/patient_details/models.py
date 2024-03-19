@@ -1,11 +1,14 @@
 from django.db import models
-
+from django.utils import timezone
 # Create your models here.
 
 class Patient_details(models.Model):
-    age = models.PositiveIntegerField()
-    weight = models.DecimalField(max_digits=5, decimal_places=2)
-    height = models.DecimalField(max_digits=5, decimal_places=2)
+    name = models.CharField(max_length = 100, default= 'patient')
+    dob = models.DateField(default=timezone.now)
+    phone_number = models.CharField(max_length = 12 , default = 0)
+    age = models.CharField(max_length = 200)
+    weight = models.CharField(max_length=5,)
+    height = models.CharField(max_length=5,)
     SEX_CHOICES = [
         ('M', 'Male'),
         ('F', 'Female'),

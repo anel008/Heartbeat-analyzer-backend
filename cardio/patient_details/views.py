@@ -2,6 +2,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .serializers import pdetails_serializers
 from .models import Patient_details
+from rest_framework.generics import GenericAPIView
 
 @api_view(['GET','POST'])
 def getRoutes(request):
@@ -35,3 +36,25 @@ def  p_details(request):
 
 
 
+class p_create(GenericAPIView):
+    serializer_class = pdetails_serializers
+
+    def post(self, request):
+        data = request.data
+
+        details = Patient_details.objects.create(
+            name = data['name'],
+            dob = data['dob'],
+            phone_number = ['phone_number'],
+            age = ['age'],
+            weight = ['weight'],
+            height = ['height'],
+            sex = ['sex'],
+            hyper_tension_bp = ['hyper_tension_bp'],
+            chest_pain =['chest_pain'], 
+            palpitation = ['palpitation'],
+            surgery = ['surgery'],
+            any_other =['any_other'],
+        )
+        serializer = pdetails_serializers(details)
+        return Response(serializer.data)
