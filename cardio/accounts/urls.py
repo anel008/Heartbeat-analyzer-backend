@@ -1,6 +1,7 @@
 from django.urls import path
-from .views import RegisterView
+from .views import PRegisterView,DRegisterView
 
 urlpatterns = [
-     path('a',RegisterView.as_view())
+     path('p',PRegisterView.as_view()),
+     path('d',DRegisterView.as_view())
 ]
