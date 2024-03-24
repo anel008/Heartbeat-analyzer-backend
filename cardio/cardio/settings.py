@@ -39,10 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
 
+    'rest_framework',
+    'django_filters',
+
     'patient_details',
     'doctor_details',
     'accounts',
-    'rest_framework',
+    
 ]
 
 MIDDLEWARE = [

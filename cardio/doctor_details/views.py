@@ -1,11 +1,18 @@
 from django.shortcuts import render
-from rest_framework import status,generics
-from rest_framework.decorators import api_view
+from rest_framework import status, viewsets,filters
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
-from .serializers import Ddetails_serializers,pdetails_serializers
+from .serializers import Ddetails_serializers
 from .models import Doctor_profile
 from rest_framework.generics import GenericAPIView
 from patient_details.models import Patient_details
+from patient_details.serializers import pdetails_serializers
+from django_filters import rest_framework as filter
+
+
+
+
+
 
 # Create your views here.
 
@@ -59,7 +66,7 @@ class d_create(GenericAPIView):
         
 
 
-# fetching all the enterd details
+# fetching all the enterd details in doctor
 class d_details(GenericAPIView):
     serializer_class = Ddetails_serializers
     queryset = Doctor_profile.objects.all()  # Define the queryset attribute
@@ -114,3 +121,29 @@ class p_create(GenericAPIView):
         )
         serializer = pdetails_serializers(details)
         return Response(serializer.data)
+    
+
+class Doctor_postfilter(filter.FilterSet):
+    search_feilds = filter.CharFilter(field_name="Doctor name", lookup_expr="iexact")
+
+
+class Search_Doctors(viewsets.ModelViewSet):
+    queryset = Doctor_profile.objects.all()
+    serializer_class = Ddetails_serializers
+    filter_backends = [DjangoFilterBackend,filters.SearchFilter,filters.OrderingFilter]
+    filter_class = Doctor_postfilter
+    search_fields = ["doctor_name"]
+    ordering_fields = "__all__"
+
+
+class Patient_postfilter(filter.FilterSet):
+    search_feilds = filter.CharFilter(field_name = "patient name", lookup_expr="iexact")
+
+
+class Search_Patient(viewsets.ModelViewSet):
+    serializer_class = pdetails_serializers
+    queryset = Patient_details.objects.all()
+    filter_backends = [DjangoFilterBackend,filters.SearchFilter,filters.OrderingFilter]
+    filter_class = Patient_postfilter
+    search_fields = ["name"]
+    ordering_fields = "__all__"

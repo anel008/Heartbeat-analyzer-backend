@@ -9,7 +9,5 @@ class Ddetails_serializers(ModelSerializer):
 
 
 
-class pdetails_serializers(ModelSerializer):
-    class Meta :
-        model = Patient_details
-        fields = '__all__'
+
+
