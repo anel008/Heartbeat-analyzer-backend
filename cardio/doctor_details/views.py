@@ -1,10 +1,12 @@
 from django.shortcuts import render
-from rest_framework import status
+from rest_framework import status,generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import Ddetails_serializers
+from .serializers import Ddetails_serializers,pdetails_serializers
 from .models import Doctor_profile
 from rest_framework.generics import GenericAPIView
+from patient_details.models import Patient_details
+
 # Create your views here.
 
 
@@ -27,6 +29,9 @@ from rest_framework.generics import GenericAPIView
 #         serializer = Ddetails_serializers(details)
 #         return Response(serializer.data)
 
+
+
+# creating a doctor account
 class d_create(GenericAPIView):
     serializer_class = Ddetails_serializers
 
@@ -54,7 +59,7 @@ class d_create(GenericAPIView):
         
 
 
-
+# fetching all the enterd details
 class d_details(GenericAPIView):
     serializer_class = Ddetails_serializers
     queryset = Doctor_profile.objects.all()  # Define the queryset attribute
@@ -64,3 +69,48 @@ class d_details(GenericAPIView):
         serializer = Ddetails_serializers(details, many=True)
         return Response(serializer.data)
     
+
+
+# class DoctorUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Doctor_profile.objects.all() 
+#     serializer_class = Ddetails_serializers
+    
+
+
+
+
+
+# fetching the patient datas from the data base
+class p_details(GenericAPIView):
+    serializer_class = pdetails_serializers
+    queryset = Patient_details.objects.all()
+
+    def get(self,request):    
+        details = self.get_queryset()    
+        serialzers = pdetails_serializers(details,many = True)
+        return Response(serialzers.data)
+
+
+# creating patient account
+class p_create(GenericAPIView):
+    serializer_class = pdetails_serializers
+
+    def post(self, request):
+        data = request.data
+
+        details = Patient_details.objects.create(
+            name = data['name'],
+            dob = data['dob'],
+            phone_number = ['phone_number'],
+            age = ['age'],
+            weight = ['weight'],
+            height = ['height'],
+            sex = ['sex'],
+            hyper_tension_bp = ['hyper_tension_bp'],
+            chest_pain =['chest_pain'], 
+            palpitation = ['palpitation'],
+            surgery = ['surgery'],
+            any_other =['any_other'],
+        )
+        serializer = pdetails_serializers(details)
+        return Response(serializer.data)
