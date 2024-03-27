@@ -18,26 +18,6 @@ from django_filters import rest_framework as filter
 
 
 
-# class d_create(GenericAPIView):
-#     serializer_class = Ddetails_serializers
-
-#     def post (self, request):
-#         data = request.data
-
-#         details = Doctor_profile.objects.create(
-
-#             doctor_name = data['doctor_name'],
-#             license_no = data['license_no'],
-#             specialty = data['specialty'],
-#             email = data['email'],
-#             phone_number = data['phone_number'],
-#             bio = data['bio']
-#             )
-#         serializer = Ddetails_serializers(details)
-#         return Response(serializer.data)
-
-
-
 # creating a doctor account
 class d_create(GenericAPIView):
     serializer_class = Ddetails_serializers
@@ -98,42 +78,20 @@ class p_details(GenericAPIView):
         return Response(serialzers.data)
 
 
-# creating patient account
-class p_create(GenericAPIView):
-    serializer_class = pdetails_serializers
-
-    def post(self, request):
-        data = request.data
-
-        details = Patient_details.objects.create(
-            name = data['name'],
-            dob = data['dob'],
-            phone_number = ['phone_number'],
-            age = ['age'],
-            weight = ['weight'],
-            height = ['height'],
-            sex = ['sex'],
-            hyper_tension_bp = ['hyper_tension_bp'],
-            chest_pain =['chest_pain'], 
-            palpitation = ['palpitation'],
-            surgery = ['surgery'],
-            any_other =['any_other'],
-        )
-        serializer = pdetails_serializers(details)
-        return Response(serializer.data)
-    
-
-class Doctor_postfilter(filter.FilterSet):
-    search_feilds = filter.CharFilter(field_name="Doctor name", lookup_expr="iexact")
 
 
-class Search_Doctors(viewsets.ModelViewSet):
-    queryset = Doctor_profile.objects.all()
-    serializer_class = Ddetails_serializers
-    filter_backends = [DjangoFilterBackend,filters.SearchFilter,filters.OrderingFilter]
-    filter_class = Doctor_postfilter
-    search_fields = ["doctor_name"]
-    ordering_fields = "__all__"
+
+# class Doctor_postfilter(filter.FilterSet):
+#     search_feilds = filter.CharFilter(field_name="Doctor name", lookup_expr="iexact")
+
+
+# class Search_Doctors(viewsets.ModelViewSet):
+#     queryset = Doctor_profile.objects.all()
+#     serializer_class = Ddetails_serializers
+#     filter_backends = [DjangoFilterBackend,filters.SearchFilter,filters.OrderingFilter]
+#     filter_class = Doctor_postfilter
+#     search_fields = ["doctor_name"]
+#     ordering_fields = "__all__"
 
 
 class Patient_postfilter(filter.FilterSet):
