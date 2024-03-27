@@ -4,10 +4,9 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
 from .serializers import Ddetails_serializers
 from .models import Doctor_profile
-from rest_framework.generics import GenericAPIView
-from patient_details.models import Patient_details
-from patient_details.serializers import pdetails_serializers
+from rest_framework.generics import GenericAPIView,RetrieveUpdateAPIView,DestroyAPIView
 from django_filters import rest_framework as filter
+
 
 
 
@@ -56,6 +55,44 @@ class d_details(GenericAPIView):
         serializer = Ddetails_serializers(details, many=True)
         return Response(serializer.data)
     
+
+# update the doctor profile
+
+class Update_Doctor(RetrieveUpdateAPIView):
+    serializer_class = Ddetails_serializers
+    queryset = Doctor_profile.objects.all()
+
+    def get_object(self):
+        license_no = self.kwargs.get('license_no')  # Get the license_no from URL kwargs
+        return Doctor_profile.objects.get(license_no=license_no)  # Retrieve the doctor based on the license_no
+
+    def patch(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+
+# delete function on Doctor
+    
+class Delete_Doctor(DestroyAPIView):
+    serializer_class = Ddetails_serializers
+    querry_set = Doctor_profile.objects.all()
+
+    def get_object(self):
+        license_no = self.kwargs.get('license_no')
+        return Doctor_profile.objects.get(license_no = license_no)
+    
+    def delete (self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
 
 
 

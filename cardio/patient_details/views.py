@@ -2,9 +2,7 @@
 from rest_framework.response import Response
 from .serializers import pdetails_serializers
 from .models import Patient_details
-from doctor_details.models import Doctor_profile
-from doctor_details.serializers import Ddetails_serializers
-from rest_framework.generics import GenericAPIView
+from rest_framework.generics import GenericAPIView,RetrieveUpdateAPIView,DestroyAPIView
 from django_filters import rest_framework as filter
 from rest_framework import status, viewsets,filters
 from django_filters.rest_framework import DjangoFilterBackend
@@ -56,22 +54,42 @@ class p_create(GenericAPIView):
         return Response(serializer.data)
     
 
+class Update_Patient(RetrieveUpdateAPIView):
+    serializer_class = pdetails_serializers
+    queryset = Patient_details.objects.all()
 
-#searching doctor list
+    def get_object(self):
+        name = self.kwargs.get('name')
+        return Patient_details.objects.get(name= name)
+
+    def patch(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data = request.data, partial = True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
-# class Doctor_postfilter(filter.FilterSet):
-#     search_feilds = filter.CharFilter(field_name="Doctor name", lookup_expr="iexact")
+# Delete patient list
+
+class Delete_patient(DestroyAPIView):
+    serializer_class = pdetails_serializers  # Not required for delete operation
+    queryset = Patient_details.objects.all() 
+
+    def get_object(self):
+        name = self.kwargs.get('name') 
+        return Patient_details.objects.get(name=name)  # Retrieve the patient based on the name
+
+    def delete(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
 
 
-# class Search_Doctors(viewsets.ModelViewSet):
-#     queryset = Doctor_profile.objects.all()
-#     serializer_class = Ddetails_serializers
-#     filter_backends = [DjangoFilterBackend,filters.SearchFilter,filters.OrderingFilter]
-#     filter_class = Doctor_postfilter
-#     search_fields = ["doctor_name"]
-#     ordering_fields = "__all__"
-
+# searching patient list 
 
 class Patient_postfilter(filter.FilterSet):
     search_feilds = filter.CharFilter(field_name = "patient name", lookup_expr="iexact")
