@@ -58,50 +58,19 @@ class d_details(GenericAPIView):
     
 
 
-# class DoctorUpdateDelete(generics.RetrieveUpdateDestroyAPIView):
-#     queryset = Doctor_profile.objects.all() 
-#     serializer_class = Ddetails_serializers
-    
+
+# searching doctor from lsit
+
+class Doctor_postfilter(filter.FilterSet):
+    search_feilds = filter.CharFilter(field_name="Doctor name", lookup_expr="iexact")
 
 
-
-
-
-# fetching the patient datas from the data base
-class p_details(GenericAPIView):
-    serializer_class = pdetails_serializers
-    queryset = Patient_details.objects.all()
-
-    def get(self,request):    
-        details = self.get_queryset()    
-        serialzers = pdetails_serializers(details,many = True)
-        return Response(serialzers.data)
-
-
-
-
-
-# class Doctor_postfilter(filter.FilterSet):
-#     search_feilds = filter.CharFilter(field_name="Doctor name", lookup_expr="iexact")
-
-
-# class Search_Doctors(viewsets.ModelViewSet):
-#     queryset = Doctor_profile.objects.all()
-#     serializer_class = Ddetails_serializers
-#     filter_backends = [DjangoFilterBackend,filters.SearchFilter,filters.OrderingFilter]
-#     filter_class = Doctor_postfilter
-#     search_fields = ["doctor_name"]
-#     ordering_fields = "__all__"
-
-
-class Patient_postfilter(filter.FilterSet):
-    search_feilds = filter.CharFilter(field_name = "patient name", lookup_expr="iexact")
-
-
-class Search_Patient(viewsets.ModelViewSet):
-    serializer_class = pdetails_serializers
-    queryset = Patient_details.objects.all()
+class Search_Doctors(viewsets.ModelViewSet):
+    queryset = Doctor_profile.objects.all()
+    serializer_class = Ddetails_serializers
     filter_backends = [DjangoFilterBackend,filters.SearchFilter,filters.OrderingFilter]
-    filter_class = Patient_postfilter
-    search_fields = ["name"]
+    filter_class = Doctor_postfilter
+    search_fields = ["doctor_name"]
     ordering_fields = "__all__"
+
+

@@ -60,14 +60,27 @@ class p_create(GenericAPIView):
 #searching doctor list
     
 
-class Doctor_postfilter(filter.FilterSet):
-    search_feilds = filter.CharFilter(field_name="Doctor name", lookup_expr="iexact")
+# class Doctor_postfilter(filter.FilterSet):
+#     search_feilds = filter.CharFilter(field_name="Doctor name", lookup_expr="iexact")
 
 
-class Search_Doctors(viewsets.ModelViewSet):
-    queryset = Doctor_profile.objects.all()
-    serializer_class = Ddetails_serializers
+# class Search_Doctors(viewsets.ModelViewSet):
+#     queryset = Doctor_profile.objects.all()
+#     serializer_class = Ddetails_serializers
+#     filter_backends = [DjangoFilterBackend,filters.SearchFilter,filters.OrderingFilter]
+#     filter_class = Doctor_postfilter
+#     search_fields = ["doctor_name"]
+#     ordering_fields = "__all__"
+
+
+class Patient_postfilter(filter.FilterSet):
+    search_feilds = filter.CharFilter(field_name = "patient name", lookup_expr="iexact")
+
+
+class Search_Patient(viewsets.ModelViewSet):
+    serializer_class = pdetails_serializers
+    queryset = Patient_details.objects.all()
     filter_backends = [DjangoFilterBackend,filters.SearchFilter,filters.OrderingFilter]
-    filter_class = Doctor_postfilter
-    search_fields = ["doctor_name"]
+    filter_class = Patient_postfilter
+    search_fields = ["name"]
     ordering_fields = "__all__"
