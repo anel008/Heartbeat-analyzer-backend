@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from rest_framework import status, viewsets,filters
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
@@ -17,7 +16,8 @@ from django_filters import rest_framework as filter
 
 
 
-# creating a doctor account
+# ********* creating a doctor account ************* #
+
 class d_create(GenericAPIView):
     serializer_class = Ddetails_serializers
 
@@ -45,7 +45,8 @@ class d_create(GenericAPIView):
         
 
 
-# fetching all the enterd details in doctor
+# ********** fetching all the enterd details in doctor ************* #
+        
 class d_details(GenericAPIView):
     serializer_class = Ddetails_serializers
     queryset = Doctor_profile.objects.all()  # Define the queryset attribute
@@ -56,7 +57,7 @@ class d_details(GenericAPIView):
         return Response(serializer.data)
     
 
-# update the doctor profile
+# ************** update the doctor profile *************** #
 
 class Update_Doctor(RetrieveUpdateAPIView):
     serializer_class = Ddetails_serializers
@@ -77,7 +78,7 @@ class Update_Doctor(RetrieveUpdateAPIView):
     
 
 
-# delete function on Doctor
+# *************** delete function on Doctor ****************#
     
 class Delete_Doctor(DestroyAPIView):
     serializer_class = Ddetails_serializers
@@ -96,7 +97,7 @@ class Delete_Doctor(DestroyAPIView):
 
 
 
-# searching doctor from lsit
+# ************** searching doctor from lsit **************** #
 
 class Doctor_postfilter(filter.FilterSet):
     search_feilds = filter.CharFilter(field_name="Doctor name", lookup_expr="iexact")

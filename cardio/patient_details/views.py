@@ -9,7 +9,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 
 
-# fetching the patient datas from the data base
+# *************** fetching the patient datas from the data base ***************** #
+
 class p_details(GenericAPIView):
     serializer_class = pdetails_serializers
     queryset = Patient_details.objects.all()
@@ -29,7 +30,8 @@ class p_details(GenericAPIView):
 
 
 
-
+# ********* creating a patient deatails ************* #
+    
 class p_create(GenericAPIView):
     serializer_class = pdetails_serializers
 
@@ -54,6 +56,8 @@ class p_create(GenericAPIView):
         return Response(serializer.data)
     
 
+# ************** update the patient details *************** #
+
 class Update_Patient(RetrieveUpdateAPIView):
     serializer_class = pdetails_serializers
     queryset = Patient_details.objects.all()
@@ -72,7 +76,7 @@ class Update_Patient(RetrieveUpdateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
-# Delete patient list
+# ************* Delete patient list ***************** #
 
 class Delete_patient(DestroyAPIView):
     serializer_class = pdetails_serializers  # Not required for delete operation
@@ -89,7 +93,7 @@ class Delete_patient(DestroyAPIView):
     
 
 
-# searching patient list 
+# ************** searching patient list **************** #
 
 class Patient_postfilter(filter.FilterSet):
     search_feilds = filter.CharFilter(field_name = "patient name", lookup_expr="iexact")

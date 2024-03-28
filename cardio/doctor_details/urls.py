@@ -8,18 +8,18 @@ urlpatterns = [
     
     #***********DOCTOR**********#
     
-    path('dc',d_create.as_view()),#doctor create
-    path('dd',d_details.as_view()),#doctor details
-    path('Dupdate/<int:license_no>',Update_Doctor.as_view()),   # update doctor
-    path('Ddelete/<str:license_no>',Delete_Doctor.as_view()),   # Delete doctor
+    path('dc',d_create.as_view()),  #doctor create
+    path('dd',d_details.as_view()), #doctor details
+    path('Dupdate/<int:license_no>',Update_Doctor.as_view()),   #update doctor
+    path('Ddelete/<str:license_no>',Delete_Doctor.as_view()),   #Delete doctor
     
 
     #**********PATIENT IN DOCTOR **********#
 
-    path('pd',p_details.as_view()),#patient detail view
-    path('pc',p_create.as_view()),   #patient create
-    path('Pupdate/<str:name>',Update_Patient.as_view()),   # update the patient details
-    path('Pdelete/<str:name>',Delete_patient.as_view()),   # delete patient
-    path('Psearch',Search_Patient.as_view({'get':'list'})) # patient search 
+    path('pd',p_details.as_view()),     #patient detail view
+    path('pc',p_create.as_view()),      #patient create
+    path('Pupdate/<str:name>',Update_Patient.as_view()),     #update the patient details
+    path('Pdelete/<str:name>',Delete_patient.as_view()),     #delete patient
+    path('Psearch',Search_Patient.as_view({'get':'list'}))   #patient search 
 
 ]
