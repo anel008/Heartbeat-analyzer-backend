@@ -46,6 +46,10 @@ INSTALLED_APPS = [
     'patient_details',
     'doctor_details',
     'accounts',
+
+
+
+    'knox',
     
 ]
 
@@ -132,5 +136,13 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+
+}
 
 
