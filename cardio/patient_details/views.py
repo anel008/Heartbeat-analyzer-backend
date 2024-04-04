@@ -18,6 +18,9 @@ class p_details(GenericAPIView):
     def get(self,request):    
         details = self.get_queryset()    
         serialzers = pdetails_serializers(details,many = True)
+        print("#########################")
+        print("User id ", request.user)
+        print("#########################")
         return Response(serialzers.data)
 
 

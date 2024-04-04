@@ -3,8 +3,10 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
 from .serializers import Ddetails_serializers
 from .models import Doctor_profile
+from django.contrib.auth.models import User
 from rest_framework.generics import GenericAPIView,RetrieveUpdateAPIView,DestroyAPIView
 from django_filters import rest_framework as filter
+
 
 
 
@@ -47,15 +49,54 @@ class d_create(GenericAPIView):
 
 # ********** fetching all the enterd details in doctor ************* #
         
-class d_details(GenericAPIView):
-    serializer_class = Ddetails_serializers
-    queryset = Doctor_profile.objects.all()  # Define the queryset attribute
 
-    def get(self, request):
-        details = self.get_queryset()  # Retrieve queryset using get_queryset() method
-        serializer = Ddetails_serializers(details, many=True)
-        return Response(serializer.data)
-    
+
+# from rest_framework.authentication import TokenAuthentication
+# from rest_framework.permissions import IsAuthenticated
+
+# class d_details(GenericAPIView):
+#     serializer_class = Ddetails_serializers
+#     queryset = Doctor_profile.objects.all()  # Define the queryset attribute
+
+#     authentication_classes = [TokenAuthentication]
+#     permission_classes = [IsAuthenticated]
+
+#     def get(self, request):
+#         details = self.get_queryset()  # Retrieve queryset using get_queryset() method
+#         serializer = Ddetails_serializers(details, many=True)
+#         print (request.user)
+#         return Response(serializer.data)
+
+
+# class d_details(GenericAPIView):
+#     serializer_class = Ddetails_serializers
+#     queryset = Doctor_profile.objects.all()  # Define the queryset attribute
+
+#     def get_queryset(self):
+#         if self.request.user.is_authenticated:  # Check if the user is authenticated
+#             return Doctor_profile.objects.filter(username=self.request.user)
+#         else:
+#             return Doctor_profile.objects.none()  # Return an empty queryset if the user is not authenticated
+
+
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import authentication, permissions
+from .serializers import Ddetails_serializers
+
+
+class d_details(APIView):
+    authentication_classes=[authentication.BasicAuthentication]
+    permission_classes=[permissions.IsAuthenticated]
+
+    def get(self,request, *args, **kwargs):
+        id=request.user.id
+        qs=Doctor_profile.objects.filter(user_id=id)
+        serializers=Ddetails_serializers(qs,many=True)
+        return Response(data=serializers.data)
+
+
 
 # ************** update the doctor profile *************** #
 

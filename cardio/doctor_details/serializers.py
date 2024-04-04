@@ -6,6 +6,7 @@ class Ddetails_serializers(ModelSerializer):
     class Meta :
         model = Doctor_profile
         fields = '__all__'
+        #extra_kwargs = {"username":{"read_only" : True}}
 
 
 
