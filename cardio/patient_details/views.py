@@ -3,8 +3,9 @@ from rest_framework.response import Response
 from .serializers import pdetails_serializers
 from .models import Patient_details
 from rest_framework.generics import GenericAPIView,RetrieveUpdateAPIView,DestroyAPIView
+from rest_framework.views import APIView
 from django_filters import rest_framework as filter
-from rest_framework import status, viewsets,filters
+from rest_framework import status, viewsets,filters,authentication, permissions
 from django_filters.rest_framework import DjangoFilterBackend
 
 
@@ -14,9 +15,6 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 
 from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import authentication, permissions
-from .serializers import pdetails_serializers
 
 
 class p_details(APIView):
@@ -64,24 +62,33 @@ class p_create(GenericAPIView):
 
     def post(self, request):
         data = request.data
-
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        
+        # Extracting data from the serializer
+        validated_data = serializer.validated_data
+        
+        # Creating a new instance of Patient_details
         details = Patient_details.objects.create(
-            name = data['name'],
-            dob = data['dob'],
-            phone_number = ['phone_number'],
-            age = ['age'],
-            weight = ['weight'],
-            height = ['height'],
-            sex = ['sex'],
-            hyper_tension_bp = ['hyper_tension_bp'],
-            chest_pain =['chest_pain'], 
-            palpitation = ['palpitation'],
-            surgery = ['surgery'],
-            any_other =['any_other'],
-        )
-        serializer = pdetails_serializers(details)
-        return Response(serializer.data)
-    
+            name=validated_data['name'],
+            dob=validated_data['dob'],
+            phone_number=validated_data['phone_number'],
+            age=validated_data['age'],
+            weight=validated_data['weight'],
+            height=validated_data['height'],
+            sex=validated_data['sex'],
+            hyper_tension_bp=validated_data['hyper_tension_bp'],
+            chest_pain=validated_data['chest_pain'], 
+            palpitation=validated_data['palpitation'],
+            surgery=validated_data['surgery'],
+            any_other=validated_data['any_other'],
+            #user_id = ['user_id']
+            #user=request.user  # Assuming you're passing the authenticated user
+        )   
+
+        # Serializing the created instance and returning the response
+        response_serializer = self.get_serializer(details)
+        return Response(response_serializer.data)
 
 # ************** update the patient details *************** #
 
