@@ -11,17 +11,41 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 # *************** fetching the patient datas from the data base ***************** #
 
-class p_details(GenericAPIView):
-    serializer_class = pdetails_serializers
-    queryset = Patient_details.objects.all()
 
-    def get(self,request):    
-        details = self.get_queryset()    
-        serialzers = pdetails_serializers(details,many = True)
-        print("#########################")
-        print("User id ", request.user)
-        print("#########################")
-        return Response(serialzers.data)
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import authentication, permissions
+from .serializers import pdetails_serializers
+
+
+class p_details(APIView):
+    authentication_classes=[authentication.BasicAuthentication]
+    permission_classes=[permissions.IsAuthenticated]
+
+    def get(self,request, *args, **kwargs):
+        id=request.user.id
+        qs=Patient_details.objects.filter(user_id=id)
+        serializers=pdetails_serializers(qs,many=True)
+        return Response(data=serializers.data)
+
+
+
+
+
+
+
+# class p_details(GenericAPIView):
+#     serializer_class = pdetails_serializers
+#     queryset = Patient_details.objects.all()
+
+#     def get(self,request):    
+#         details = self.get_queryset()    
+#         serialzers = pdetails_serializers(details,many = True)
+#         print("#########################")
+#         print("User id ", request.user)
+#         print("#########################")
+#         return Response(serialzers.data)
 
 
 

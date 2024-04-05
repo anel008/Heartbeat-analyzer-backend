@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import User
 # Create your models here.
 
 class Patient_details(models.Model):
@@ -26,7 +27,7 @@ class Patient_details(models.Model):
     palpitation = models.CharField( max_length=50,choices=CHOICES)
     surgery = models.CharField( max_length=50,choices=CHOICES)
     any_other = models.TextField(max_length = 50) 
-
+    user_id=models.ForeignKey(User,on_delete=models.CASCADE,null=True)
 # class Doctor_details(models.Model):
 #     doctor_name = models.CharField(max_length=50)
 #     description = models.TextField(max_length = 200)
