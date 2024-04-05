@@ -56,8 +56,14 @@ class p_details(APIView):
 
 
 # ********* creating a patient deatails ************* #
-    
+# from rest_framework import authentication, permissions
+
+
 class p_create(GenericAPIView):
+    # authentication_classes=[authentication.BasicAuthentication]
+    # permission_classes=[permissions.IsAuthenticated]
+
+
     serializer_class = pdetails_serializers
 
     def post(self, request):
@@ -82,13 +88,17 @@ class p_create(GenericAPIView):
             palpitation=validated_data['palpitation'],
             surgery=validated_data['surgery'],
             any_other=validated_data['any_other'],
-            #user_id = ['user_id']
-            #user=request.user  # Assuming you're passing the authenticated user
+            user_id=request.user  # Assign the authenticated user directly
         )   
 
         # Serializing the created instance and returning the response
         response_serializer = self.get_serializer(details)
         return Response(response_serializer.data)
+
+
+
+
+
 
 # ************** update the patient details *************** #
 
