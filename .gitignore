@@ -1,4 +1,7 @@
 _virtual
 audio_files
 backup
+django
+cardio
+temp_data
 heart_dataset
