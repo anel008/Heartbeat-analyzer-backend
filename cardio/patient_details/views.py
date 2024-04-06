@@ -151,6 +151,9 @@ class Search_Patient(viewsets.ModelViewSet):
     search_fields = ["name"]
     ordering_fields = "__all__"
 
+
+# ************** RECORDING *************** #
+
 class recordings(APIView):
     serializer_class = recording_serializers
 
