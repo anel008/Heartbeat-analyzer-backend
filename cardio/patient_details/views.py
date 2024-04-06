@@ -1,6 +1,6 @@
 
 from rest_framework.response import Response
-from .serializers import pdetails_serializers
+from .serializers import pdetails_serializers,recording_serializers
 from .models import Patient_details
 from rest_framework.generics import GenericAPIView,RetrieveUpdateAPIView,DestroyAPIView
 from rest_framework.views import APIView
@@ -150,3 +150,13 @@ class Search_Patient(viewsets.ModelViewSet):
     filter_class = Patient_postfilter
     search_fields = ["name"]
     ordering_fields = "__all__"
+
+class recordings(APIView):
+    serializer_class = recording_serializers
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()  # This will save the uploaded file to the record field
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -71,3 +71,9 @@ class Patient_details(models.Model):
 #     doctor_name = models.CharField(max_length=50)
 #     description = models.TextField(max_length = 200)
 #     health_condition = models.TextField(max_length=100)
+
+
+
+class recordings(models.Model):
+    patient = models.ForeignKey(Patient_details, on_delete=models.CASCADE,null=True)
+    record = models.FileField(upload_to='recordfile')

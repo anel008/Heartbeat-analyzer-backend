@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import p_create,p_details,Update_Patient,Delete_patient
+from .views import p_create,p_details,Update_Patient,Delete_patient,recordings
 from doctor_details.views import Search_Doctors,d_details
 
 urlpatterns = [
@@ -9,6 +9,7 @@ urlpatterns = [
     path('Pupdate/<str:name>',Update_Patient.as_view()),   # update the patient details
     path('Pdelete/<str:name>',Delete_patient.as_view()),   # delete patient
     path('Pcreate',p_create.as_view()),   # create the patient details
+    path('record',recordings.as_view()),   # recordings save to DataBase
     #path('p/<str:pk>/',views.p_details),
 
 
