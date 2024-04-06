@@ -153,13 +153,20 @@ class Search_Patient(viewsets.ModelViewSet):
 
 
 # ************** RECORDING *************** #
+from django.core.files.storage import default_storage
+from django.conf import settings
+import os
 
 class recordings(APIView):
     serializer_class = recording_serializers
-
+    
     def post(self, request):
+        # Ensure the upload directory exists
+        upload_path = os.path.join(settings.MEDIA_ROOT, 'recordfile')
+        os.makedirs(upload_path, exist_ok=True)  # Creates the directory if it doesn't exist; does nothing otherwise
+
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
-            serializer.save()  # This will save the uploaded file to the record field
+            serializer.save()  # This will save the uploaded file, and Django takes care of the directory
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
