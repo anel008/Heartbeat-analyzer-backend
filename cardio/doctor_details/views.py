@@ -58,7 +58,7 @@ class d_create(GenericAPIView):
             return Response({"error": "User not authenticated"}, status=status.HTTP_401_UNAUTHORIZED)
         
 
-        
+
 
 # ********** fetching all the enterd details in doctor ************* #
         
@@ -131,3 +131,70 @@ class Search_Doctors(viewsets.ModelViewSet):
     ordering_fields = "__all__"
 
 
+
+
+
+
+# ************** Model prediction ***************** #
+
+
+from rest_framework.parsers import FileUploadParser
+import numpy as np 
+from io import BytesIO
+import librosa
+import pickle
+
+from django.conf import settings
+
+
+class Forecast(APIView):
+    file_parser_classes = [FileUploadParser]
+    def extract_features(self,y, sr):
+        mfccs = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=13)
+        spectral_centroid = librosa.feature.spectral_centroid(y=y, sr=sr)[0]
+        spectral_rolloff = librosa.feature.spectral_rolloff(y=y, sr=sr)[0]
+        zcr = librosa.feature.zero_crossing_rate(y)[0]
+        rmse = librosa.feature.rms(y=y)[0]
+        cepstrum = librosa.feature.mfcc(y=y, sr=sr, n_mfcc=13)[0]
+        D = librosa.stft(y)  # Compute the spectrogram
+        spectral_spread = librosa.feature.spectral_bandwidth(y=y, sr=sr)[0]
+
+
+        features = np.hstack((np.mean(mfccs, axis=1), 
+                          np.mean(spectral_centroid), 
+                          np.mean(spectral_rolloff), 
+                          np.mean(zcr), 
+                          np.mean(rmse),
+                          np.mean(cepstrum),
+                          np.mean(spectral_spread),))
+        return features
+    
+    def load_model(self):
+        with open('resources/model.pkl', 'rb') as file:
+            model = pickle.load(file)
+
+        with open("resources/label_encoder.pkl", 'rb') as file :
+            label_encoder = pickle.load(file)
+
+        return (model, label_encoder)
+    def post(self, request):
+            print("********************************************")
+            print("Request = ", type(request.body))
+            print("********************************************")
+            
+            audio_data = request.body
+            file_buffer = BytesIO(audio_data)
+            samples, sr = librosa.load(file_buffer)
+
+            # Loading model
+            model, label_encoder = self.load_model()
+
+            input_feature_data = []
+            for i in range(0, len(samples), (sr * 5)):
+                input_feature_data.append(self.extract_features(samples[i:(i + (sr * 5))], sr))
+
+            preds = model.predict(input_feature_data)
+            aggregate_class_index = round(np.mean(preds))
+            forecast = label_encoder.inverse_transform([aggregate_class_index])[0]
+
+            return Response({'forecast': forecast}, status=status.HTTP_201_CREATED)

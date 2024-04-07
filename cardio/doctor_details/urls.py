@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import d_create,d_details,Update_Doctor,Delete_Doctor #,p_create #,DoctorUpdateDelete,Search_Doctors
+from .views import d_create,d_details,Update_Doctor,Delete_Doctor,Forecast #,p_create #,DoctorUpdateDelete,Search_Doctors
 from patient_details.views import p_create,Search_Patient,p_details,Update_Patient,Delete_patient
 
 
@@ -12,6 +12,7 @@ urlpatterns = [
     path('dd',d_details.as_view()), #doctor details
     path('Dupdate/<int:license_no>',Update_Doctor.as_view()),   #update doctor
     path('Ddelete/<str:license_no>',Delete_Doctor.as_view()),   #Delete doctor
+    path("forecast", Forecast.as_view()),   # model training - give audio file <= 2 mb as input
     
 
     #**********PATIENT IN DOCTOR **********#
