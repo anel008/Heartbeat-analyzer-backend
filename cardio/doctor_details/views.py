@@ -6,7 +6,8 @@ from .models import Doctor_profile
 from django.contrib.auth.models import User
 from rest_framework.generics import GenericAPIView,RetrieveUpdateAPIView,DestroyAPIView
 from django_filters import rest_framework as filter
-
+from rest_framework.views import APIView
+from rest_framework import authentication, permissions
 
 
 
@@ -24,66 +25,43 @@ class d_create(GenericAPIView):
     serializer_class = Ddetails_serializers
 
     def post(self, request):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            validated_data = serializer.validated_data
-            try:
-                details = Doctor_profile.objects.create(
-                    doctor_name=validated_data['doctor_name'],
-                    license_no=validated_data['license_no'],
-                    specialty=validated_data['specialty'],
-                    email=validated_data['email'],
-                    phone_number=validated_data['phone_number'],
-                    bio=validated_data.get('bio', '')  # Get bio if provided, otherwise default to empty string
-                )
-                serializer = Ddetails_serializers(details)
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
-            except KeyError as e:
-                return Response({"error": f"Missing key in data: {e}"}, status=status.HTTP_400_BAD_REQUEST)
-            except Exception as e:
-                return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        # Ensure the authenticated user is retrieved properly
+        user = request.user
+
+        # Proceed only if the user is authenticated
+        if user.is_authenticated:
+            data = request.data
+            serializer = self.get_serializer(data=data)
+            if serializer.is_valid():
+                validated_data = serializer.validated_data
+                try:
+                    # Creating a new instance of Doctor_profile
+                    details = Doctor_profile.objects.create(
+                        doctor_name=validated_data['doctor_name'],
+                        license_no=validated_data['license_no'],
+                        specialty=validated_data['specialty'],
+                        email=validated_data['email'],
+                        phone_number=validated_data['phone_number'],
+                        bio=validated_data.get('bio', '')  # Use get() to avoid KeyError if bio is not provided
+                    )
+                    # Serializing the created instance and returning the response
+                    response_serializer = Ddetails_serializers(details)
+                    return Response(response_serializer.data, status=status.HTTP_201_CREATED)
+                except Exception as e:
+                    # Catch any other exception and return an internal server error
+                    return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            else:
+                # Return validation errors if the data is not valid
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            # Return an error if the user is not authenticated
+            return Response({"error": "User not authenticated"}, status=status.HTTP_401_UNAUTHORIZED)
         
 
+        
 
 # ********** fetching all the enterd details in doctor ************* #
         
-
-
-# from rest_framework.authentication import TokenAuthentication
-# from rest_framework.permissions import IsAuthenticated
-
-# class d_details(GenericAPIView):
-#     serializer_class = Ddetails_serializers
-#     queryset = Doctor_profile.objects.all()  # Define the queryset attribute
-
-#     authentication_classes = [TokenAuthentication]
-#     permission_classes = [IsAuthenticated]
-
-#     def get(self, request):
-#         details = self.get_queryset()  # Retrieve queryset using get_queryset() method
-#         serializer = Ddetails_serializers(details, many=True)
-#         print (request.user)
-#         return Response(serializer.data)
-
-
-# class d_details(GenericAPIView):
-#     serializer_class = Ddetails_serializers
-#     queryset = Doctor_profile.objects.all()  # Define the queryset attribute
-
-#     def get_queryset(self):
-#         if self.request.user.is_authenticated:  # Check if the user is authenticated
-#             return Doctor_profile.objects.filter(username=self.request.user)
-#         else:
-#             return Doctor_profile.objects.none()  # Return an empty queryset if the user is not authenticated
-
-
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import authentication, permissions
-from .serializers import Ddetails_serializers
 
 
 class d_details(APIView):
