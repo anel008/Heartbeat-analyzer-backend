@@ -14,21 +14,21 @@ class Patient_details(models.Model):
     height = models.IntegerField(default=0)  
 
     SEX_CHOICES = [
-        ('M', 'Male'),
-        ('F', 'Female'),
-        ('O', 'Other'),
+        ('Male', 'Male'),
+        ('Female', 'Female'),
+        ('Other', 'Other'),
     ]
-    sex = models.CharField(max_length=1, choices=SEX_CHOICES)
+    sex = models.CharField(max_length=100, choices=SEX_CHOICES)
 
     YES_NO_CHOICES = [
-        ('1', 'Yes'),
-        ('0', 'No'),
+        ('yes', 'Yes'),
+        ('no', 'No'),
     ]
 
-    hyper_tension_bp = models.CharField(max_length=1, choices=YES_NO_CHOICES, default='0')  # Default added
-    chest_pain = models.CharField(max_length=1, choices=YES_NO_CHOICES, default='0')  # Default added
-    palpitation = models.CharField(max_length=1, choices=YES_NO_CHOICES, default='0')  # Default added
-    surgery = models.CharField(max_length=1, choices=YES_NO_CHOICES, default='0')  # Default added
+    hyper_tension_bp = models.CharField(max_length=100, choices=YES_NO_CHOICES, default='0')  # Default added
+    chest_pain = models.CharField(max_length=100, choices=YES_NO_CHOICES, default='0')  # Default added
+    palpitation = models.CharField(max_length=100, choices=YES_NO_CHOICES, default='0')  # Default added
+    surgery = models.CharField(max_length=100, choices=YES_NO_CHOICES, default='0')  # Default added
     any_other = models.TextField(max_length=50, default='')  # Default added
 
     user_id=models.ForeignKey(User,on_delete=models.CASCADE,null=True)
