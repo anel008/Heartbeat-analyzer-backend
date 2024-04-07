@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'rest_framework.authtoken',
+    'corsheaders',
 
     'patient_details',
     'doctor_details',
@@ -61,6 +62,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware'
 ]
 
 ROOT_URLCONF = 'cardio.urls'
@@ -145,4 +147,13 @@ REST_FRAMEWORK = {
 
 }
 
+
+CORS_ALLOWED_ORIGINS = [
+    'http://127.0.0.1:8000',  # Example: Allow requests from your Flutter app running locally
+    # Add more origins as needed
+]
+
+CORS_ALLOW_ALL_ORIGINS = True  # Set this to True to allow all origins (not recommended for production)
+
+# Other CORS settings as needed
 
