@@ -2,11 +2,15 @@
 from rest_framework.response import Response
 from .serializers import pdetails_serializers,recording_serializers,patient_name_list_serializers
 from .models import Patient_details
+from django.contrib.auth.models import User
 from rest_framework.generics import GenericAPIView,RetrieveUpdateAPIView,DestroyAPIView
 from rest_framework.views import APIView
 from django_filters import rest_framework as filter
 from rest_framework import status, viewsets,filters,authentication, permissions
 from django_filters.rest_framework import DjangoFilterBackend
+from django.core.files.storage import default_storage
+from django.conf import settings
+import os
 
 
 
@@ -45,14 +49,13 @@ class p_details(APIView):
 
 
 
-
 # ********* creating a patient deatails ************* #
 
 
 # from rest_framework import authentication, permissions
 
 
-from django.contrib.auth.models import User
+
 
 class p_create(GenericAPIView):
     serializer_class = pdetails_serializers
@@ -151,9 +154,7 @@ class Search_Patient(viewsets.ModelViewSet):
 
 
 # ************** RECORDING *************** #
-from django.core.files.storage import default_storage
-from django.conf import settings
-import os
+
 
 class recordings(APIView):
     serializer_class = recording_serializers

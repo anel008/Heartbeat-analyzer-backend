@@ -8,6 +8,13 @@ from rest_framework.generics import GenericAPIView,RetrieveUpdateAPIView,Destroy
 from django_filters import rest_framework as filter
 from rest_framework.views import APIView
 from rest_framework import authentication, permissions
+from rest_framework.parsers import FileUploadParser
+import numpy as np 
+from io import BytesIO
+import librosa
+import pickle
+
+from django.conf import settings
 
 
 
@@ -138,13 +145,6 @@ class Search_Doctors(viewsets.ModelViewSet):
 # ************** Model prediction ***************** #
 
 
-from rest_framework.parsers import FileUploadParser
-import numpy as np 
-from io import BytesIO
-import librosa
-import pickle
-
-from django.conf import settings
 
 
 class Forecast(APIView):
