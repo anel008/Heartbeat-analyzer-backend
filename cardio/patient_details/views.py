@@ -1,6 +1,6 @@
 
 from rest_framework.response import Response
-from .serializers import pdetails_serializers,recording_serializers
+from .serializers import pdetails_serializers,recording_serializers,patient_name_list_serializers
 from .models import Patient_details
 from rest_framework.generics import GenericAPIView,RetrieveUpdateAPIView,DestroyAPIView
 from rest_framework.views import APIView
@@ -10,11 +10,26 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 
 
+# ********** fetching the enterd names in patients ************* #
+
+
+
+class p_names(APIView):
+    authentication_classes=[authentication.BasicAuthentication]
+    permission_classes=[permissions.IsAuthenticated]
+
+    def get(self,request, *args, **kwargs):
+        id=request.user.id
+        qs=Patient_details.objects.filter(user_id=id)
+        serializers=patient_name_list_serializers(qs,many=True)
+        return Response(data=serializers.data)
+
+
+
 # *************** fetching the patient datas from the data base ***************** #
 
 
 
-from rest_framework.views import APIView
 
 
 class p_details(APIView):
@@ -31,31 +46,9 @@ class p_details(APIView):
 
 
 
-
-
-# class p_details(GenericAPIView):
-#     serializer_class = pdetails_serializers
-#     queryset = Patient_details.objects.all()
-
-#     def get(self,request):    
-#         details = self.get_queryset()    
-#         serialzers = pdetails_serializers(details,many = True)
-#         print("#########################")
-#         print("User id ", request.user)
-#         print("#########################")
-#         return Response(serialzers.data)
-
-
-
-#@api_view(['GET'])
-#def  p_details(request,pk):
-#    details = Patient_details.objects.get(id = pk)
-#   serializers = pdetails_serializers(details,many = False)
-#    return Response(serializers.data)
-
-
-
 # ********* creating a patient deatails ************* #
+
+
 # from rest_framework import authentication, permissions
 
 

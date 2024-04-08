@@ -1,11 +1,12 @@
 from django.urls import path
-from .views import p_create,p_details,Update_Patient,Delete_patient,recordings
+from .views import p_create,p_details,Update_Patient,Delete_patient,recordings,p_names
 from doctor_details.views import Search_Doctors,d_details
 
 urlpatterns = [
 
     #************PATIENT***********#
     path('pd',p_details.as_view()),   # view patient detail
+    path('p_namelist',p_names.as_view()),
     path('Pupdate/<str:name>',Update_Patient.as_view()),   # update the patient details
     path('Pdelete/<str:name>',Delete_patient.as_view()),   # delete patient
     path('Pcreate',p_create.as_view()),   # create the patient details

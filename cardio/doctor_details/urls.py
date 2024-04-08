@@ -10,8 +10,8 @@ urlpatterns = [
     
     path('dc',d_create.as_view()),  #doctor create
     path('dd',d_details.as_view()), #doctor details
-    path('Dupdate/<int:license_no>',Update_Doctor.as_view()),   #update doctor
-    path('Ddelete/<str:license_no>',Delete_Doctor.as_view()),   #Delete doctor
+    path('Dupdate/<str:doctor_name>',Update_Doctor.as_view()),   #update doctor
+    path('Ddelete/<str:doctor_name>',Delete_Doctor.as_view()),   #Delete doctor
     path("forecast", Forecast.as_view()),   # model training - give audio file <= 2 mb as input
     
 

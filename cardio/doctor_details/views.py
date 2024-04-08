@@ -83,8 +83,8 @@ class Update_Doctor(RetrieveUpdateAPIView):
     queryset = Doctor_profile.objects.all()
 
     def get_object(self):
-        license_no = self.kwargs.get('license_no')  # Get the license_no from URL kwargs
-        return Doctor_profile.objects.get(license_no=license_no)  # Retrieve the doctor based on the license_no
+        doctor_name = self.kwargs.get('doctor_name')  # Get the license_no from URL kwargs
+        return Doctor_profile.objects.get(doctor_name=doctor_name)  # Retrieve the doctor based on the license_no
 
     def patch(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -104,8 +104,8 @@ class Delete_Doctor(DestroyAPIView):
     querry_set = Doctor_profile.objects.all()
 
     def get_object(self):
-        license_no = self.kwargs.get('license_no')
-        return Doctor_profile.objects.get(license_no = license_no)
+        doctor_name = self.kwargs.get('doctor_name')
+        return Doctor_profile.objects.get(doctor_name = doctor_name)
     
     def delete (self, request, *args, **kwargs):
         instance = self.get_object()

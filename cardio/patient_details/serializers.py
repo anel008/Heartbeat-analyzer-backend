@@ -15,3 +15,9 @@ class recording_serializers(ModelSerializer):
     class Meta:
         model = recordings
         fields = '__all__'
+
+
+class patient_name_list_serializers(ModelSerializer):
+    class Meta:
+        model = Patient_details
+        fields = ['name']
